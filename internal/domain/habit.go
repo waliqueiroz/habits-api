@@ -7,3 +7,9 @@ type Habit struct {
 	Title     string
 	CreatedAt time.Time
 }
+
+type HabitWeekday struct {
+	ID      string
+	HabitID string
+	Weekday int
+}
