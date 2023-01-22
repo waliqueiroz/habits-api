@@ -5,6 +5,7 @@ import "time"
 type Habit struct {
 	ID        string
 	Title     string
+	Weekdays  []HabitWeekday
 	CreatedAt time.Time
 }
 

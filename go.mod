@@ -6,6 +6,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.41.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/mattn/go-sqlite3 v1.14.16
+	github.com/oklog/ulid/v2 v2.1.0
 )
 
 require (

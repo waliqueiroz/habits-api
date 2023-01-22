@@ -7,6 +7,7 @@ import (
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/waliqueiroz/habits-api/internal/infra/repository/sqlite/seeds"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -52,4 +53,8 @@ func Migrate(db *sql.DB) error {
 	}
 
 	return nil
+}
+
+func Seed(db *sql.DB) {
+	seeds.Execute(db)
 }
