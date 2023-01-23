@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/waliqueiroz/habits-api/internal/infra/repository/sqlite/seeds"
 
@@ -14,8 +15,8 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-func Connect() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "./database.db")
+func Connect() (*sqlx.DB, error) {
+	db, err := sqlx.Open("sqlite3", "./database.db")
 	if err != nil {
 		return nil, err
 	}
