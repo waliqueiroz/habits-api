@@ -3,8 +3,8 @@ package seeds
 import (
 	"time"
 
-	"github.com/oklog/ulid/v2"
 	"github.com/waliqueiroz/habits-api/internal/domain"
+	"github.com/waliqueiroz/habits-api/pkg/identity"
 )
 
 func (s Seed) DaySeed() {
@@ -14,7 +14,7 @@ func (s Seed) DaySeed() {
 
 	days := []domain.Day{
 		{
-			ID:   ulid.Make().String(),
+			ID:   identity.NewULID(),
 			Date: dayOne,
 			Habits: []domain.Habit{
 				{
@@ -23,7 +23,7 @@ func (s Seed) DaySeed() {
 			},
 		},
 		{
-			ID:   ulid.Make().String(),
+			ID:   identity.NewULID(),
 			Date: dayTwo,
 			Habits: []domain.Habit{
 				{
@@ -32,7 +32,7 @@ func (s Seed) DaySeed() {
 			},
 		},
 		{
-			ID:   ulid.Make().String(),
+			ID:   identity.NewULID(),
 			Date: dayThree,
 			Habits: []domain.Habit{
 				{
@@ -65,7 +65,7 @@ func (s Seed) DaySeed() {
 				panic(err)
 			}
 			// execute query
-			_, err = stmt.Exec(ulid.Make().String(), day.ID, habit.ID)
+			_, err = stmt.Exec(identity.NewULID(), day.ID, habit.ID)
 			if err != nil {
 				panic(err)
 			}

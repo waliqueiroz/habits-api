@@ -41,9 +41,9 @@ func (r *habitRepository) Create(ctx context.Context, habit domain.Habit) (*doma
 
 	defer tx.Rollback()
 
-	insertHabit := "INSERT INTO habits(id, title, created_at) VALUES (?,?,?)"
+	insertHabitQuery := "INSERT INTO habits(id, title, created_at) VALUES (?,?,?)"
 
-	_, err = tx.ExecContext(ctx, insertHabit, habit.ID, habit.Title, habit.CreatedAt)
+	_, err = tx.ExecContext(ctx, insertHabitQuery, habit.ID, habit.Title, habit.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +57,9 @@ func (r *habitRepository) Create(ctx context.Context, habit domain.Habit) (*doma
 			insertWeekDaysAppend = append(insertWeekDaysAppend, "(?,?,?)")
 		}
 
-		insertWeekDays := fmt.Sprintf("INSERT INTO habit_weekdays(id, habit_id, weekday) VALUES %s", strings.Join(insertWeekDaysAppend, ","))
+		insertWeekDaysQuery := fmt.Sprintf("INSERT INTO habit_weekdays(id, habit_id, weekday) VALUES %s", strings.Join(insertWeekDaysAppend, ","))
 
-		_, err = tx.ExecContext(ctx, insertWeekDays, args...)
+		_, err = tx.ExecContext(ctx, insertWeekDaysQuery, args...)
 		if err != nil {
 			return nil, err
 		}

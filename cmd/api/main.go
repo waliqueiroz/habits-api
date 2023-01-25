@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -12,6 +13,8 @@ import (
 )
 
 func main() {
+	time.Local = time.UTC
+
 	db, err := sqlite.Connect()
 	if err != nil {
 		panic(err)

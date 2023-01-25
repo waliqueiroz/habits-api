@@ -1,19 +1,17 @@
 package seeds
 
 import (
-	"fmt"
 	"time"
 
-	"github.com/oklog/ulid/v2"
 	"github.com/waliqueiroz/habits-api/internal/domain"
+	"github.com/waliqueiroz/habits-api/pkg/identity"
 )
 
-var firstHabitId = ulid.Make().String()
-var secondHabitId = ulid.Make().String()
-var thirdHabitId = ulid.Make().String()
+var firstHabitId = identity.NewULID()
+var secondHabitId = identity.NewULID()
+var thirdHabitId = identity.NewULID()
 
 func (s Seed) HabitSeed() {
-	fmt.Println("OS IDS AQUI", firstHabitId, secondHabitId, thirdHabitId)
 	firstHabitCreationDate, _ := time.Parse(time.RFC3339Nano, "2022-12-31T03:00:00.000Z")
 	secondHabitCreationDate, _ := time.Parse(time.RFC3339Nano, "2023-01-03T03:00:00.000Z")
 	thirdHabitCreationDate, _ := time.Parse(time.RFC3339Nano, "2023-01-08T03:00:00.000Z")
@@ -94,8 +92,7 @@ func (s Seed) HabitSeed() {
 				panic(err)
 			}
 			// execute query
-			fmt.Println("TESTE", habit.ID, weekday.Weekday)
-			_, err = stmt.Exec(ulid.Make().String(), habit.ID, weekday.Weekday)
+			_, err = stmt.Exec(identity.NewULID(), habit.ID, weekday.Weekday)
 			if err != nil {
 				panic(err)
 			}
