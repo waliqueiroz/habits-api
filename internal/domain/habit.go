@@ -8,7 +8,9 @@ import (
 )
 
 type HabitRepository interface {
-	Create(ctx context.Context, habit Habit) (*Habit, error)
+	Create(ctx context.Context, habit Habit) error
+	GetPossibleHabits(ctx context.Context, date time.Time) ([]Habit, error)
+	GetCompletedHabits(ctx context.Context, date time.Time) ([]Habit, error)
 }
 
 type Habit struct {
@@ -41,10 +43,15 @@ func NewHabit(title string, weekdays []int) Habit {
 		ID:        habitID,
 		Title:     title,
 		Weekdays:  habitWeekdays,
-		CreatedAt: truncateToDay(time.Now()).UTC(),
+		CreatedAt: truncateToDay(time.Now()),
 	}
 }
 
 func truncateToDay(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+}
+
+type DayResume struct {
+	PossibleHabits  []Habit
+	CompletedHabits []Habit
 }

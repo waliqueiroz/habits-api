@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/waliqueiroz/habits-api/internal/application"
 )
@@ -16,16 +18,32 @@ func NewHabitController(habitService application.HabitService) *HabitController 
 }
 
 func (c *HabitController) Create(ctx *fiber.Ctx) error {
-	var habit HabitRequest
+	var habit HabitRequestDTO
 
 	if err := ctx.BodyParser(&habit); err != nil {
 		return err
 	}
 
-	newHabit, err := c.habitService.Create(ctx.Context(), mapHabitDTOToDomain(habit))
+	err := c.habitService.Create(ctx.Context(), mapHabitRequestToDomain(habit))
 	if err != nil {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(mapHabitResponseFromDomain(*newHabit))
+	return ctx.SendStatus(fiber.StatusCreated)
+}
+
+func (c *HabitController) GetDayResume(ctx *fiber.Ctx) error {
+	dateString := ctx.Query("date")
+
+	date, err := time.Parse(time.RFC3339Nano, dateString)
+	if err != nil {
+		return err
+	}
+
+	dayResume, err := c.habitService.GetDayResume(ctx.Context(), date)
+	if err != nil {
+		return err
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(mapDayResumeFromDomain(*dayResume))
 }

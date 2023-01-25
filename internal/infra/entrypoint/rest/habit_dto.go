@@ -6,43 +6,59 @@ import (
 	"github.com/waliqueiroz/habits-api/internal/domain"
 )
 
-type HabitRequest struct {
+type HabitRequestDTO struct {
 	Title    string `json:"title"`
 	Weekdays []int  `json:"weekdays"`
 }
 
-func mapHabitDTOToDomain(habit HabitRequest) domain.Habit {
+func mapHabitRequestToDomain(habit HabitRequestDTO) domain.Habit {
 	return domain.NewHabit(habit.Title, habit.Weekdays)
 }
 
-type HabitResponse struct {
-	ID        string                 `json:"id"`
-	Title     string                 `json:"title"`
-	Weekdays  []HabitWeekdayResponse `json:"weekdays"`
-	CreatedAt time.Time              `json:"created_at"`
+type HabitResponseDTO struct {
+	ID        string    `json:"id"`
+	Title     string    `json:"title"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
-type HabitWeekdayResponse struct {
+type HabitWeekdayDTO struct {
 	ID      string `json:"id"`
 	HabitID string `json:"habit_id"`
 	Weekday int    `json:"weekday"`
 }
 
-func mapHabitResponseFromDomain(habit domain.Habit) HabitResponse {
-	habitWeekdays := make([]HabitWeekdayResponse, len(habit.Weekdays))
-
-	for key, value := range habit.Weekdays {
-		habitWeekdays[key] = HabitWeekdayResponse{
-			ID:      value.ID,
-			HabitID: value.HabitID,
-			Weekday: value.Weekday,
-		}
-	}
-
-	return HabitResponse{
+func mapHabitFromDomain(habit domain.Habit) HabitResponseDTO {
+	return HabitResponseDTO{
 		ID:        habit.ID,
 		Title:     habit.Title,
-		Weekdays:  habitWeekdays,
 		CreatedAt: habit.CreatedAt,
+	}
+}
+
+func mapHabitsFromDomain(habits []domain.Habit) []HabitResponseDTO {
+	list := make([]HabitResponseDTO, len(habits))
+
+	for i, habit := range habits {
+		list[i] = mapHabitFromDomain(habit)
+	}
+
+	return list
+}
+
+type DayResumeDTO struct {
+	PossibleHabits  []HabitResponseDTO `json:"possible_habits"`
+	CompletedHabits []string           `json:"completed_habits"`
+}
+
+func mapDayResumeFromDomain(dayResume domain.DayResume) DayResumeDTO {
+	completedHabits := make([]string, len(dayResume.CompletedHabits))
+
+	for i, completedHabit := range dayResume.CompletedHabits {
+		completedHabits[i] = completedHabit.ID
+	}
+
+	return DayResumeDTO{
+		PossibleHabits:  mapHabitsFromDomain(dayResume.PossibleHabits),
+		CompletedHabits: completedHabits,
 	}
 }
