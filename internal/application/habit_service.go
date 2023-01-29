@@ -9,7 +9,7 @@ import (
 
 type HabitService interface {
 	Create(ctx context.Context, habit domain.Habit) error
-	GetDayResume(ctx context.Context, date time.Time) (*domain.DayResume, error)
+	GetDayProgress(ctx context.Context, date time.Time) (*domain.DayProgress, error)
 	ToggleHabit(ctx context.Context, habitID string) error
 	GetSummary(ctx context.Context) ([]domain.DailySummary, error)
 }
@@ -39,7 +39,7 @@ func (s *habitService) Create(ctx context.Context, habit domain.Habit) error {
 	return nil
 }
 
-func (s *habitService) GetDayResume(ctx context.Context, date time.Time) (*domain.DayResume, error) {
+func (s *habitService) GetDayProgress(ctx context.Context, date time.Time) (*domain.DayProgress, error) {
 	possibleHabits, err := s.habitRepository.GetPossibleHabits(ctx, date)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (s *habitService) GetDayResume(ctx context.Context, date time.Time) (*domai
 		return nil, err
 	}
 
-	return &domain.DayResume{
+	return &domain.DayProgress{
 		PossibleHabits:  possibleHabits,
 		CompletedHabits: completedHabits,
 	}, nil

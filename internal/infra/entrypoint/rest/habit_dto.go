@@ -44,7 +44,7 @@ type DayResumeDTO struct {
 	CompletedHabits []string           `json:"completed_habits"`
 }
 
-func mapDayResumeFromDomain(dayResume domain.DayResume) DayResumeDTO {
+func mapDayResumeFromDomain(dayResume domain.DayProgress) DayResumeDTO {
 	completedHabits := make([]string, len(dayResume.CompletedHabits))
 
 	for i, completedHabit := range dayResume.CompletedHabits {

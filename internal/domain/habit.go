@@ -51,7 +51,7 @@ func TruncateToDay(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 }
 
-type DayResume struct {
+type DayProgress struct {
 	PossibleHabits  []Habit
 	CompletedHabits []Habit
 }

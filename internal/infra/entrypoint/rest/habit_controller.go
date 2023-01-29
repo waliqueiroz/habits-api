@@ -32,7 +32,7 @@ func (c *HabitController) Create(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(fiber.StatusCreated)
 }
 
-func (c *HabitController) GetDayResume(ctx *fiber.Ctx) error {
+func (c *HabitController) GetDayProgress(ctx *fiber.Ctx) error {
 	dateString := ctx.Query("date")
 
 	date, err := time.Parse(time.RFC3339Nano, dateString)
@@ -40,7 +40,7 @@ func (c *HabitController) GetDayResume(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	dayResume, err := c.habitService.GetDayResume(ctx.Context(), date)
+	dayResume, err := c.habitService.GetDayProgress(ctx.Context(), date)
 	if err != nil {
 		return err
 	}
