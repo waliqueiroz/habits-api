@@ -10,6 +10,7 @@ import (
 type DayRepository interface {
 	Create(ctx context.Context, day Day) error
 	FindByDate(ctx context.Context, date time.Time) (*Day, error)
+	GetSummary(ctx context.Context) ([]DailySummary, error)
 }
 
 type Day struct {
@@ -23,4 +24,10 @@ func NewDay(date time.Time) Day {
 		ID:   identity.NewULID(),
 		Date: date,
 	}
+}
+
+type DailySummary struct {
+	Day
+	Completed int
+	Amount    int
 }

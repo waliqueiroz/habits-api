@@ -45,7 +45,7 @@ func (c *HabitController) GetDayResume(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(mapDayResumeFromDomain(*dayResume))
+	return ctx.JSON(mapDayResumeFromDomain(*dayResume))
 }
 
 func (c *HabitController) ToggleHabit(ctx *fiber.Ctx) error {
@@ -57,4 +57,13 @@ func (c *HabitController) ToggleHabit(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.SendStatus(fiber.StatusOK)
+}
+
+func (c *HabitController) GetSummary(ctx *fiber.Ctx) error {
+	summary, err := c.habitService.GetSummary(ctx.Context())
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(mapDailySummariesFromDomain(summary))
 }

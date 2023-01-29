@@ -56,3 +56,29 @@ func mapDayResumeFromDomain(dayResume domain.DayResume) DayResumeDTO {
 		CompletedHabits: completedHabits,
 	}
 }
+
+type DailySummary struct {
+	ID        string    `json:"id"`
+	Date      time.Time `json:"date"`
+	Completed int       `json:"completed"`
+	Amount    int       `json:"amount"`
+}
+
+func mapDailySummaryFromDomain(dailySummary domain.DailySummary) DailySummary {
+	return DailySummary{
+		ID:        dailySummary.ID,
+		Date:      dailySummary.Date,
+		Completed: dailySummary.Completed,
+		Amount:    dailySummary.Amount,
+	}
+}
+
+func mapDailySummariesFromDomain(dailySummaries []domain.DailySummary) []DailySummary {
+	list := make([]DailySummary, len(dailySummaries))
+
+	for i, habit := range dailySummaries {
+		list[i] = mapDailySummaryFromDomain(habit)
+	}
+
+	return list
+}

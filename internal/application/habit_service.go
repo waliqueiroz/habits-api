@@ -11,6 +11,7 @@ type HabitService interface {
 	Create(ctx context.Context, habit domain.Habit) error
 	GetDayResume(ctx context.Context, date time.Time) (*domain.DayResume, error)
 	ToggleHabit(ctx context.Context, habitID string) error
+	GetSummary(ctx context.Context) ([]domain.DailySummary, error)
 }
 
 type habitService struct {
@@ -89,4 +90,13 @@ func (s *habitService) ToggleHabit(ctx context.Context, habitID string) error {
 	}
 
 	return nil
+}
+
+func (s *habitService) GetSummary(ctx context.Context) ([]domain.DailySummary, error) {
+	summary, err := s.dayRepository.GetSummary(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return summary, nil
 }
