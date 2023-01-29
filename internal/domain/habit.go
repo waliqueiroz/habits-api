@@ -43,11 +43,11 @@ func NewHabit(title string, weekdays []int) Habit {
 		ID:        habitID,
 		Title:     title,
 		Weekdays:  habitWeekdays,
-		CreatedAt: truncateToDay(time.Now()),
+		CreatedAt: TruncateToDay(time.Now()),
 	}
 }
 
-func truncateToDay(t time.Time) time.Time {
+func TruncateToDay(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 }
 

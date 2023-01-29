@@ -47,3 +47,14 @@ func (c *HabitController) GetDayResume(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusOK).JSON(mapDayResumeFromDomain(*dayResume))
 }
+
+func (c *HabitController) ToggleHabit(ctx *fiber.Ctx) error {
+	habitID := ctx.Params("habitID")
+
+	err := c.habitService.ToggleHabit(ctx.Context(), habitID)
+	if err != nil {
+		return err
+	}
+
+	return ctx.SendStatus(fiber.StatusOK)
+}

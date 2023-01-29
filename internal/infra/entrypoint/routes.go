@@ -9,5 +9,6 @@ func CreateRoutes(router fiber.Router, habitController *rest.HabitController) {
 	api := router.Group("/api")
 
 	api.Post("/habits", habitController.Create)
+	api.Patch("/habits/:habitID/toggle", habitController.ToggleHabit)
 	api.Get("/day", habitController.GetDayResume)
 }

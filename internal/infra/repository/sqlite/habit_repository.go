@@ -16,8 +16,8 @@ type Habit struct {
 	CreatedAt time.Time `db:"created_at"`
 }
 
-func mapHabitToDomain(habit Habit) domain.Habit {
-	return domain.Habit{
+func mapHabitToDomain(habit Habit) *domain.Habit {
+	return &domain.Habit{
 		ID:        habit.ID,
 		Title:     habit.Title,
 		CreatedAt: habit.CreatedAt,
@@ -28,7 +28,7 @@ func mapHabitsToDomain(habits []Habit) []domain.Habit {
 	list := make([]domain.Habit, len(habits))
 
 	for i, habit := range habits {
-		list[i] = mapHabitToDomain(habit)
+		list[i] = *mapHabitToDomain(habit)
 	}
 
 	return list

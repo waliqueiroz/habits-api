@@ -10,15 +10,20 @@ import (
 type HabitService interface {
 	Create(ctx context.Context, habit domain.Habit) error
 	GetDayResume(ctx context.Context, date time.Time) (*domain.DayResume, error)
+	ToggleHabit(ctx context.Context, habitID string) error
 }
 
 type habitService struct {
-	habitRepository domain.HabitRepository
+	habitRepository    domain.HabitRepository
+	dayRepository      domain.DayRepository
+	dayHabitRepository domain.DayHabitRepository
 }
 
-func NewHabitService(habitRepository domain.HabitRepository) HabitService {
+func NewHabitService(habitRepository domain.HabitRepository, dayRepository domain.DayRepository, dayHabitRepository domain.DayHabitRepository) HabitService {
 	return &habitService{
-		habitRepository: habitRepository,
+		habitRepository:    habitRepository,
+		dayRepository:      dayRepository,
+		dayHabitRepository: dayHabitRepository,
 	}
 }
 
@@ -48,4 +53,40 @@ func (s *habitService) GetDayResume(ctx context.Context, date time.Time) (*domai
 		PossibleHabits:  possibleHabits,
 		CompletedHabits: completedHabits,
 	}, nil
+}
+
+func (s *habitService) ToggleHabit(ctx context.Context, habitID string) error {
+	today := domain.TruncateToDay(time.Now())
+
+	day, err := s.dayRepository.FindByDate(ctx, today)
+	if err != nil {
+		switch err {
+		case domain.ErrResourceNotFound:
+			err := s.dayRepository.Create(ctx, domain.NewDay(today))
+			if err != nil {
+				return err
+			}
+		default:
+			return err
+		}
+	}
+
+	existsDayHabit, err := s.dayHabitRepository.ExistsByDayIDAndHabitID(ctx, day.ID, habitID)
+	if err != nil {
+		return err
+	}
+
+	if existsDayHabit {
+		err := s.dayHabitRepository.DeleteByDayIDAndHabitID(ctx, day.ID, habitID)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := s.dayHabitRepository.Create(ctx, domain.NewDayHabit(day.ID, habitID))
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

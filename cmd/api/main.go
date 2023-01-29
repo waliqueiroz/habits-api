@@ -35,7 +35,10 @@ func main() {
 	app.Use(cors.New())
 
 	habitRepository := sqlite.NewHabitRepository(db)
-	habitService := application.NewHabitService(habitRepository)
+	dayRepository := sqlite.NewDayRepository(db)
+	dayHabitRepository := sqlite.NewDayHabitRepository(db)
+
+	habitService := application.NewHabitService(habitRepository, dayRepository, dayHabitRepository)
 	habitController := rest.NewHabitController(habitService)
 
 	entrypoint.CreateRoutes(app, habitController)

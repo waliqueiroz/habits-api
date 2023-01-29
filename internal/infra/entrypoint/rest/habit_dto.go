@@ -21,12 +21,6 @@ type HabitResponseDTO struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-type HabitWeekdayDTO struct {
-	ID      string `json:"id"`
-	HabitID string `json:"habit_id"`
-	Weekday int    `json:"weekday"`
-}
-
 func mapHabitFromDomain(habit domain.Habit) HabitResponseDTO {
 	return HabitResponseDTO{
 		ID:        habit.ID,

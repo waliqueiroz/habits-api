@@ -1,6 +1,16 @@
 package domain
 
-import "time"
+import (
+	"context"
+	"time"
+
+	"github.com/waliqueiroz/habits-api/pkg/identity"
+)
+
+type DayRepository interface {
+	Create(ctx context.Context, day Day) error
+	FindByDate(ctx context.Context, date time.Time) (*Day, error)
+}
 
 type Day struct {
 	ID     string
@@ -8,8 +18,9 @@ type Day struct {
 	Habits []Habit
 }
 
-type DayHabit struct {
-	ID      string
-	DayID   string
-	HabitID string
+func NewDay(date time.Time) Day {
+	return Day{
+		ID:   identity.NewULID(),
+		Date: date,
+	}
 }
